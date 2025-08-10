@@ -1,0 +1,162 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Квиз</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    body {
+        font-family: 'Segoe UI', Arial, sans-serif;
+        background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
+    #quiz-container {
+        background: #fff;
+        max-width: 600px;
+        width: 90%;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        text-align: center;
+        animation: fadeIn 0.6s ease;
+    }
+    h1, h2, p {
+        margin-bottom: 15px;
+    }
+    img {
+        max-width: 100%;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    button {
+        padding: 12px 25px;
+        font-size: 16px;
+        background: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.3s ease, transform 0.2s ease;
+        margin-top: 10px;
+    }
+    button:hover {
+        background: #45a049;
+        transform: scale(1.05);
+    }
+    input[type="text"] {
+        padding: 10px;
+        font-size: 16px;
+        width: 90%;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        transition: border 0.3s ease;
+    }
+    input[type="text"]:focus {
+        border-color: #4CAF50;
+        outline: none;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+</head>
+<body>
+
+<div id="quiz-container">
+    <h1>Добро пожаловать в квиз!</h1>
+    <button onclick="startQuiz()">Начать квиз</button>
+</div>
+
+<script>
+const quizData = [
+    {
+        question: "Начнем с простого вопроса, чисто для разгона. Согласно апокрифу, Наполеону тяжело давались названия городов Российской империи и он их переиначивал на свой лад. Так Калуга стала Калигулой, а Витебск - Висбаден. А какой город стал Саламанка",
+        image: "./img/q01.jpg",
+        answers: ["смоленск", "smolensk"],
+        correctMessage: "Правильно! Это Смоленск! Вопросы этого квиза так или иначе связаны с событиями, которые происходили в Смоленске. Теперь перейдем к настоящим вопросам, которые позволят открыть сундук с сокровищами.",
+        correctImage: "/img/q02.jpg"
+    },
+       {
+        question: "Согласно слухам - это любимое лакомство Екатерины II, которое она впервые попробовала в Смоленске? Возможно ты даже видел или пробовал его на фестивале еды",
+        image: "./img/q11.jpg",
+        answers: ["конфекты", "конфекту", "конфект"],
+        correctMessage: "Правильно! Это Смоленские конфекты – залитые сахаром фрукты. Первая цифра кода: 7",
+        correctImage: "./img/q12.jpg"
+    },
+ 
+    {
+        question: "Наверное самый сложный вопрос в духе УмФорума: где логика? Что объединяет?",
+        image: "./img/q31.jpg",
+        answers: ["ум форум", "умфорум", "um forum", "umforum", "форум", "forum"],
+        correctMessage: "Точно! Это же и есть UmForum: классика, неклассика, кино, медиа и музыка! Вторая цифра кода: 5",
+        correctImage: "./img/q32.jpg"
+    },
+       {
+        question: "Современная демократия достигла такого состояния, что на кресло губернатора Калифорнии претендовала порноактриса, а высший пост может занять даже человек из 'дома — 2'. В предыдущем предложении мы пропустили одно слово. Какое?",
+        image: "./img/q21.jpg",
+        answers: ["один", "1"],
+        correctMessage: "Верно! Речь шла про фильм Один дома 2. Поэтому последняя цифра кода: 1",
+        correctImage: "./img/q22.jpg",
+    },
+];
+
+let currentQuestion = 0;
+
+function startQuiz() {
+    currentQuestion = 0;
+    showQuestion();
+}
+
+function showQuestion() {
+    const q = quizData[currentQuestion];
+    document.getElementById("quiz-container").innerHTML = `
+        <h2>${q.question}</h2>
+        <img src="${q.image}" alt="Вопрос">
+        <div>
+            <input type="text" id="answerInput" placeholder="Ваш ответ">
+        </div>
+        <button onclick="checkAnswer()">Ответить</button>
+    `;
+}
+
+function checkAnswer() {
+    const userAnswer = document.getElementById("answerInput").value.trim().toLowerCase();
+    const q = quizData[currentQuestion];
+    if (q.answers.includes(userAnswer)) {
+        document.getElementById("quiz-container").innerHTML = `
+            <h2>${q.correctMessage}</h2>
+            <img src="${q.correctImage}" alt="Правильный ответ">
+            ${currentQuestion < quizData.length - 1
+                ? `<button onclick="nextQuestion()">Следующий вопрос</button>`
+                : `<button onclick="showFinal()">Завершить</button>`}
+        `;
+    } else {
+        alert("Неверно, попробуйте ещё раз.");
+    }
+}
+
+function nextQuestion() {
+    currentQuestion++;
+    showQuestion();
+}
+
+function showFinal() {
+    document.getElementById("quiz-container").innerHTML = `
+        <h1>Поздравляем! 🎉</h1>
+        <p>Вы прошли квиз! Код: 751</p>
+        <button onclick="startQuiz()">Пройти снова</button>
+    `;
+}
+</script>
+
+</body>
+</html>
